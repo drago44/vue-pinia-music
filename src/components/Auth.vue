@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useModalStore } from '@/stores';
 
@@ -6,6 +7,7 @@ const modalStore = useModalStore();
 const { hiddenClass, isOpen } = storeToRefs(modalStore);
 
 const modalVisibility = isOpen;
+const tab = ref('login');
 </script>
 
 <template>
@@ -47,19 +49,31 @@ const modalVisibility = isOpen;
           <ul class="flex flex-wrap mb-4">
             <li class="flex-auto text-center">
               <a
-                class="block rounded py-3 px-4 transition hover:text-white text-white bg-blue-600"
+                @click.prevent="tab = 'login'"
+                :class="{
+                  'hover:text-white text-white bg-blue-600': tab === 'login',
+                  'hover:text-blue-600': tab === 'register',
+                }"
+                class="block rounded py-3 px-4 transition"
                 href="#"
                 >Login</a
               >
             </li>
             <li class="flex-auto text-center">
-              <a class="block rounded py-3 px-4 transition" href="#"
+              <a
+                @click.prevent="tab = 'register'"
+                :class="{
+                  'hover:text-white text-white bg-blue-600': tab === 'register',
+                  'hover:text-blue-600': tab === 'login',
+                }"
+                class="block rounded py-3 px-4 transition"
+                href="#"
                 >Register</a
               >
             </li>
           </ul>
           <!-- Login Form -->
-          <form>
+          <form v-show="tab === 'login'">
             <!-- Email -->
             <div class="mb-3">
               <label class="inline-block mb-2">Email</label>
@@ -86,7 +100,7 @@ const modalVisibility = isOpen;
             </button>
           </form>
           <!-- Registration Form -->
-          <form>
+          <form v-show="tab === 'register'">
             <!-- Name -->
             <div class="mb-3">
               <label class="inline-block mb-2">Name</label>
