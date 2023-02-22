@@ -6,8 +6,18 @@ import { useModalStore } from '@/stores';
 const modalStore = useModalStore();
 const { hiddenClass, isOpen } = storeToRefs(modalStore);
 
-const modalVisibility = isOpen;
 const tab = ref('login');
+const schema = ref({
+  name: 'required|min:2|max:100|alpha_spaces',
+  email: 'required|min:2|max:100|email',
+  age: 'required|min_value:18|max_value:100',
+  password: 'required|min:2|max:100',
+  confirm_password: 'confirmed:@password',
+  country: 'required',
+  tos: 'required',
+});
+
+const modalVisibility = () => (isOpen.value = false);
 </script>
 
 <template>
@@ -16,13 +26,15 @@ const tab = ref('login');
     class="fixed z-10 inset-0 overflow-y-auto"
     id="modal"
     :class="hiddenClass"
-    @click="modalVisibility = false"
   >
     <div
       class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
     >
       <div class="fixed inset-0 transition-opacity">
-        <div class="absolute inset-0 bg-gray-800 opacity-75"></div>
+        <div
+          class="absolute inset-0 bg-gray-800 opacity-75"
+          @click="modalVisibility()"
+        ></div>
       </div>
       <!-- This element is to trick the browser into centering the modal contents. -->
       <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
@@ -40,7 +52,7 @@ const tab = ref('login');
             <!-- Modal Close Button -->
             <div
               class="modal-close cursor-pointer z-50"
-              @click="modalVisibility = false"
+              @click="modalVisibility()"
             >
               <i class="fas fa-times"></i>
             </div>
@@ -100,69 +112,87 @@ const tab = ref('login');
             </button>
           </form>
           <!-- Registration Form -->
-          <form v-show="tab === 'register'">
+          <VeeForm v-show="tab === 'register'" :validation-schema="schema">
             <!-- Name -->
             <div class="mb-3">
               <label class="inline-block mb-2">Name</label>
-              <input
+              <VeeField
+                name="name"
                 type="text"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Enter Name"
               />
+              <ErrorMessage class="text-red-600" name="name" />
             </div>
             <!-- Email -->
             <div class="mb-3">
               <label class="inline-block mb-2">Email</label>
-              <input
+              <VeeField
+                name="email"
                 type="email"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Enter Email"
               />
+              <ErrorMessage class="text-red-600" name="email" />
             </div>
             <!-- Age -->
             <div class="mb-3">
               <label class="inline-block mb-2">Age</label>
-              <input
+              <VeeField
+                name="age"
                 type="number"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+                placeholder="18"
               />
+              <ErrorMessage class="text-red-600" name="age" />
             </div>
             <!-- Password -->
             <div class="mb-3">
               <label class="inline-block mb-2">Password</label>
-              <input
+              <VeeField
+                name="password"
                 type="password"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Password"
               />
+              <ErrorMessage class="text-red-600" name="password" />
             </div>
             <!-- Confirm Password -->
             <div class="mb-3">
               <label class="inline-block mb-2">Confirm Password</label>
-              <input
+              <VeeField
+                name="confirm_password"
                 type="password"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Confirm Password"
               />
+              <ErrorMessage class="text-red-600" name="confirm_password" />
             </div>
             <!-- Country -->
             <div class="mb-3">
               <label class="inline-block mb-2">Country</label>
-              <select
+              <VeeField
+                as="select"
+                name="country"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
               >
                 <option value="USA">USA</option>
                 <option value="Mexico">Mexico</option>
                 <option value="Germany">Germany</option>
-              </select>
+                <option value="Ukraine">Ukraine</option>
+              </VeeField>
+              <ErrorMessage class="text-red-600" name="country" />
             </div>
             <!-- TOS -->
             <div class="mb-3 pl-6">
-              <input
+              <VeeField
+                name="tos"
+                value="1"
                 type="checkbox"
                 class="w-4 h-4 float-left -ml-6 mt-1 rounded"
               />
-              <label class="inline-block">Accept terms of service</label>
+              <label class="block">Accept terms of service</label>
+              <ErrorMessage class="text-red-600" name="tos" />
             </div>
             <button
               type="submit"
@@ -170,7 +200,7 @@ const tab = ref('login');
             >
               Submit
             </button>
-          </form>
+          </VeeForm>
         </div>
       </div>
     </div>
