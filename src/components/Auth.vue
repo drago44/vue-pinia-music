@@ -12,12 +12,15 @@ const schema = ref({
   email: 'required|min:2|max:100|email',
   age: 'required|min_value:18|max_value:100',
   password: 'required|min:2|max:100',
-  confirm_password: 'confirmed:@password',
+  confirm_password: 'password_mismatch:@password',
   country: 'required',
-  tos: 'required',
+  tos: 'tos',
 });
 
 const modalVisibility = () => (isOpen.value = false);
+const register = (values) => {
+  console.log(values);
+};
 </script>
 
 <template>
@@ -112,7 +115,11 @@ const modalVisibility = () => (isOpen.value = false);
             </button>
           </form>
           <!-- Registration Form -->
-          <VeeForm v-show="tab === 'register'" :validation-schema="schema">
+          <VeeForm
+            v-show="tab === 'register'"
+            :validation-schema="schema"
+            @submit="register"
+          >
             <!-- Name -->
             <div class="mb-3">
               <label class="inline-block mb-2">Name</label>
