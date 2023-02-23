@@ -1,5 +1,10 @@
 <script setup>
 import { ref } from 'vue';
+// import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores';
+
+const userStore = useUserStore();
+const { registerUser } = userStore;
 
 const regSchema = ref({
   name: 'required|min:2|max:100|alpha_spaces',
@@ -15,17 +20,26 @@ const regShowAlert = ref(false);
 const regAlertVariant = ref('bg-blue-500');
 const regAlertMsg = ref('Please wait! Your account is being created.');
 
-const register = (values) => {
+const register = async (values) => {
   regShowAlert.value = true;
   regInSubmission.value = true;
   regAlertVariant.value = 'bg-blue-500';
   regAlertMsg.value = 'Please wait! Your account is being created.';
 
+  try {
+    await registerUser(values);
+  } catch (error) {
+    regInSubmission.value = false;
+    regAlertVariant.value = 'bg-red-500';
+    regAlertMsg.value = 'An unexpected error occured. Please try again later.';
+    return;
+  }
+
   regAlertVariant.value = 'bg-green-500';
   regAlertMsg.value = 'Success! Your account has been created';
-  console.log(values);
 };
 </script>
+
 <template>
   <!-- Registration Form -->
   <div
