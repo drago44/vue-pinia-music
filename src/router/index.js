@@ -1,23 +1,47 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../views/Home.vue';
+import { Home, About, Manage } from '@/views';
+import { useUserStore } from '@/stores';
+
+const routes = [
+  {
+    name: 'home',
+    path: '/',
+    component: Home,
+  },
+  {
+    name: 'about',
+    path: '/about',
+    component: About,
+  },
+  {
+    name: 'manage',
+    alias: '/manage',
+    path: '/manage-music',
+    component: Manage,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/:catchAll(.*)*',
+    redirect: { name: 'home' },
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home,
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/About.vue'),
-    },
-  ],
+  routes,
+  linkExactActiveClass: 'text-yellow-500',
+});
+
+router.beforeEach(async (to, from, next) => {
+  if (!to.meta.requiresAuth) {
+    next();
+    return;
+  }
+
+  const userStore = useUserStore();
+
+  if (!userStore.userLoggedIn) next({ name: 'home' });
+  else next();
 });
 
 export default router;

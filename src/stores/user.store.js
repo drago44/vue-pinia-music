@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { auth, usersCollection } from '@/includes/firebase';
+import router from '@/router';
 
 export const useUserStore = defineStore({
   id: 'user',
@@ -35,6 +36,7 @@ export const useUserStore = defineStore({
       await auth.signOut();
 
       this.userLoggedIn = false;
+      router.push({ name: 'home' });
     },
   },
 });
