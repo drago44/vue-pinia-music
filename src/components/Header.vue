@@ -1,8 +1,12 @@
 <script setup>
-import { useModalStore } from '@/stores';
+import { storeToRefs } from 'pinia';
+import { useModalStore, useUserStore } from '@/stores';
 
 const modalStore = useModalStore();
+const userStore = useUserStore();
 const { toggleAuthModal } = modalStore;
+const { userLoggedIn } = storeToRefs(userStore);
+const { signOut } = userStore;
 </script>
 
 <template>
@@ -16,7 +20,7 @@ const { toggleAuthModal } = modalStore;
         <!-- Primary Navigation -->
         <ul class="flex flex-row mt-1">
           <!-- Navigation Links -->
-          <li>
+          <li v-if="!userLoggedIn">
             <a
               class="px-2 text-white"
               href="#"
@@ -25,9 +29,16 @@ const { toggleAuthModal } = modalStore;
               Login / Register</a
             >
           </li>
-          <li>
-            <a class="px-2 text-white" href="#">Manage</a>
-          </li>
+          <template v-else>
+            <li>
+              <a class="px-2 text-white" href="#">Manage</a>
+            </li>
+            <li>
+              <a @click.prevent="signOut" class="px-2 text-white" href="#"
+                >Logout</a
+              >
+            </li>
+          </template>
         </ul>
       </div>
     </nav>
