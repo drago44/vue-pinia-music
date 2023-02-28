@@ -1,6 +1,13 @@
 <script setup>
-import { ref, onBeforeUnmount } from 'vue';
+import { ref, onBeforeUnmount, defineProps } from 'vue';
 import { storage, auth, songsCollection } from '@/includes/firebase';
+
+const props = defineProps({
+  addSong: {
+    type: Function,
+    required: true,
+  },
+});
 
 const isDragOver = ref(false);
 const uploads = ref([]);
@@ -48,14 +55,17 @@ const upload = ($event) => {
         const song = {
           uid: auth.currentUser.uid,
           displayName: auth.currentUser.displayName,
-          origanName: task.snapshot.ref.name,
+          originalName: task.snapshot.ref.name,
           modifiedName: task.snapshot.ref.name,
           genre: '',
           commentCount: 0,
         };
 
         song.url = await task.snapshot.ref.getDownloadURL();
-        await songsCollection.add(song);
+        const songRef = await songsCollection.add(song);
+        const songSnapshot = await songRef.get();
+
+        props.addSong(songSnapshot);
 
         uploads.value[uploadIndex].variant = 'bg-green-400';
         uploads.value[uploadIndex].icon = 'fas fa-check';
