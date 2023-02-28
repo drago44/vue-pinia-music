@@ -4,10 +4,48 @@ import { SongItem } from '@/components';
 import { songsCollection } from '@/includes/firebase';
 
 const songs = ref([]);
+const maxPerPage = ref(5);
+const pendingRequest = ref(false);
 
 const created = () => {
   getSongs();
   window.addEventListener('scroll', handleScroll);
+};
+
+const getSongs = async () => {
+  if (pendingRequest.value) {
+    return;
+  }
+
+  pendingRequest.value = true;
+
+  let snapshots;
+
+  if (songs.value.length) {
+    const lastDoc = await songsCollection
+      .doc(songs.value[songs.value.length - 1].docId)
+      .get();
+
+    snapshots = await songsCollection
+      .orderBy('modifiedName')
+      .startAfter(lastDoc)
+      .limit(maxPerPage.value)
+      .get();
+  } else {
+    snapshots = await songsCollection
+      .orderBy('modifiedName')
+      .limit(maxPerPage.value)
+      .get();
+  }
+
+  snapshots.forEach((document) => {
+    songs.value.push({
+      ...document.data(),
+      docId: document.id,
+    });
+  });
+
+  pendingRequest.value = false;
 };
 
 const handleScroll = () => {
@@ -16,19 +54,8 @@ const handleScroll = () => {
   const bottomOfWindow = Math.round(scrollTop) + innerHeight === offsetHeight;
 
   if (bottomOfWindow) {
-    // getSongs();
+    getSongs();
   }
-};
-
-const getSongs = async () => {
-  const snapshot = await songsCollection.get();
-
-  snapshot.forEach((document) => {
-    songs.value.push({
-      ...document.data(),
-      docId: document.id,
-    });
-  });
 };
 
 onBeforeUnmount(() => {

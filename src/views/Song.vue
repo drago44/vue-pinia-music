@@ -33,7 +33,13 @@ const addComment = async (values, { resetForm }) => {
 
   const comment = {
     content: values.comment,
-    datePosted: new Date().toString(),
+    datePosted: {
+      hours: new Date().getHours().toString(),
+      minutes: new Date().getMinutes().toString(),
+      year: new Date().getFullYear().toString(),
+      month: new Date().getMonth().toString(),
+      day: new Date().getDate().toString(),
+    },
     sid: route.params.id,
     name: auth.currentUser.displayName,
     uid: auth.currentUser.uid,
