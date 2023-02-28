@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia';
 import { auth } from '@/includes/firebase';
 
-import { Header, Auth } from '@/components';
+import { Header, Auth, Player } from '@/components';
 import { useUserStore } from './stores';
 
 const userStore = useUserStore();
@@ -19,41 +19,7 @@ created();
 
 <template>
   <Header />
-
   <RouterView></RouterView>
-  <!-- Player -->
-  <div class="fixed bottom-0 left-0 bg-white px-4 py-3 w-full">
-    <!-- Track Info -->
-    <div class="text-center">
-      <span class="song-title font-bold">Song Title</span> by
-      <span class="song-artist">Artist</span>
-    </div>
-    <div class="flex flex-nowrap gap-4 items-center">
-      <!-- Play/Pause Button -->
-      <button type="button">
-        <i class="fa fa-play text-gray-500 text-xl"></i>
-      </button>
-      <!-- Current Position -->
-      <div class="player-currenttime">00:00</div>
-      <!-- Scrub Container  -->
-      <div class="w-full h-2 rounded bg-gray-200 relative cursor-pointer">
-        <!-- Player Ball -->
-        <span
-          class="absolute -top-2.5 -ml-2.5 text-gray-800 text-lg"
-          style="left: 50%"
-        >
-          <i class="fas fa-circle"></i>
-        </span>
-        <!-- Player Progress Bar-->
-        <span
-          class="block h-2 rounded bg-gradient-to-r from-blue-500 to-blue-400"
-          style="width: 20%"
-        ></span>
-      </div>
-      <!-- Duration -->
-      <div class="player-duration">03:06</div>
-    </div>
-  </div>
-
+  <Player />
   <Auth />
 </template>

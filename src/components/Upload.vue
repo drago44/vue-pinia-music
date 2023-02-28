@@ -103,11 +103,26 @@ onBeforeUnmount(() => {
         :class="{
           'bg-green-400 border-green-400 border-solid': isDragOver,
         }"
-        class="w-full px-10 py-20 rounded text-center cursor-pointer border border-dashed border-gray-400 text-gray-400 transition duration-500 hover:text-white hover:bg-green-400 hover:border-green-400 hover:border-solid"
+        class="mb-6 w-full px-10 py-20 rounded text-center cursor-pointer border border-dashed border-gray-400 text-gray-400 transition duration-500 hover:text-white hover:bg-green-400 hover:border-green-400 hover:border-solid"
       >
         <h5>Drop your files here</h5>
       </div>
-      <input type="file" multiple @change="upload($event)" />
+      <label>
+        <div
+          class="py-1.5 px-3 rounded text-white bg-green-600 mr-4 inline-block"
+        >
+          <span>Select File</span>
+          <span
+            v-for="(upload, i) in uploads"
+            :key="upload.name"
+            class="inline-block"
+          >
+            <span class="mr-2">{{ i + 1 }}</span
+            >{{ upload.name }}</span
+          >
+        </div>
+        <input type="file" multiple @change="upload($event)" class="hidden" />
+      </label>
       <hr class="my-6" />
       <!-- Progess Bars -->
       <div v-for="upload in uploads" :key="upload.name" class="mb-4">

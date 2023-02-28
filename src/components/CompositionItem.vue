@@ -124,7 +124,7 @@ const deleteSong = async () => {
         <button
           :disabled="songInSubmission"
           type="submit"
-          class="py-1.5 px-3 rounded text-white bg-green-600"
+          class="py-1.5 px-3 rounded text-white bg-green-600 mr-4"
         >
           Submit
         </button>

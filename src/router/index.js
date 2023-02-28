@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { Home, About, Manage } from '@/views';
+import { Home, About, Manage, Song } from '@/views';
 import { useUserStore } from '@/stores';
 
 const routes = [
@@ -19,6 +19,11 @@ const routes = [
     path: '/manage-music',
     component: Manage,
     meta: { requiresAuth: true },
+  },
+  {
+    name: 'song',
+    path: '/song/:id',
+    component: Song,
   },
   {
     path: '/:catchAll(.*)*',
