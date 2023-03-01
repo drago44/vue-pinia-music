@@ -1,6 +1,4 @@
 <script setup>
-import { defineProps } from 'vue';
-
 const props = defineProps({
   song: {
     type: Object,
@@ -17,16 +15,24 @@ const props = defineProps({
       <RouterLink
         :to="{ name: 'song', params: { id: song.docId } }"
         class="font-bold block text-gray-600"
-        >{{ props.song.modifiedName }}</RouterLink
       >
-      <span class="text-gray-500 text-sm">{{ props.song.name }}</span>
+        {{ props.song.modifiedName }}
+      </RouterLink>
+      <span class="text-gray-500 text-sm">
+        {{ props.song.displayName }}
+      </span>
     </div>
 
     <div class="text-gray-600 text-lg">
-      <span class="comments">
-        <i class="fa fa-comments text-gray-600"></i>
-        {{ props.song.commentCount }}
-      </span>
+      <RouterLink
+        :to="{ name: 'song', params: { id: song.docId }, hash: '#comments' }"
+        v-slot="{ navigate }"
+      >
+        <span class="comments" @click="navigate">
+          <i class="fa fa-comments text-gray-600"></i>
+          {{ props.song.commentCount }}
+        </span>
+      </RouterLink>
     </div>
   </li>
 </template>

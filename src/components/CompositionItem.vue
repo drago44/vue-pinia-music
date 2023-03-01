@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref } from 'vue';
+import { ref } from 'vue';
 import { songsCollection, storage } from '../includes/firebase';
 
 const props = defineProps({

@@ -8,6 +8,8 @@ import { useUserStore, usePlayerStore } from '@/stores';
 const userStore = useUserStore();
 const playerStore = usePlayerStore();
 
+// const toggleAudio = computed((song) => playerStore.toggleAudio(song));
+
 const song = ref({});
 const commentSchema = {
   comment: 'required|min:3',
@@ -20,6 +22,7 @@ const comments = ref([]);
 const sort = ref('1');
 
 const { userLoggedIn } = storeToRefs(userStore);
+const { playing } = storeToRefs(playerStore);
 const { newSong } = playerStore;
 
 const router = useRouter();
@@ -33,13 +36,7 @@ const addComment = async (values, { resetForm }) => {
 
   const comment = {
     content: values.comment,
-    datePosted: {
-      hours: new Date().getHours().toString(),
-      minutes: new Date().getMinutes().toString(),
-      year: new Date().getFullYear().toString(),
-      month: new Date().getMonth().toString(),
-      day: new Date().getDate().toString(),
-    },
+    datePosted: new Date().toString(),
     sid: route.params.id,
     name: auth.currentUser.displayName,
     uid: auth.currentUser.uid,
@@ -132,7 +129,10 @@ watch(sort, (newVal) => {
           type="button"
           class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
         >
-          <i class="fas fa-play"></i>
+          <i
+            class="fas"
+            :class="{ 'fa-play': !playing, 'fa-pause': playing }"
+          ></i>
         </button>
         <div class="z-50 text-left ml-8">
           <!-- Song Info -->
@@ -148,7 +148,7 @@ watch(sort, (newVal) => {
       >
         <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
           <!-- Comment Count -->
-          <span class="card-title">Comments ({{ song.commentCount + 1 }})</span>
+          <span class="card-title">Comments ({{ song.commentCount }})</span>
           <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
         </div>
         <div class="p-6">

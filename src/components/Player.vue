@@ -1,5 +1,4 @@
 <script setup>
-import { computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { usePlayerStore } from '@/stores';
 
@@ -7,9 +6,7 @@ const playerStore = usePlayerStore();
 
 const { playing, duration, seek, playerProgress, currentSong } =
   storeToRefs(playerStore);
-
-const toggleAudio = computed(() => playerStore.toggleAudio);
-const updateSeek = computed(() => playerStore.updateSeek);
+const { toggleAudio, updateSeek } = playerStore;
 </script>
 
 <template>

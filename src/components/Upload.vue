@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onBeforeUnmount, defineProps } from 'vue';
+import { ref, onBeforeUnmount } from 'vue';
 import { storage, auth, songsCollection } from '@/includes/firebase';
 
 const props = defineProps({

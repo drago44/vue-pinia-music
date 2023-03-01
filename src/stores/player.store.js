@@ -12,22 +12,26 @@ export const usePlayerStore = defineStore('player', {
   }),
   actions: {
     async newSong(song) {
-      if (this.sound instanceof Howl) {
-        this.sound.unload();
+      if (this.sound._src === song.url) {
+        this.toggleAudio();
+      } else {
+        if (this.sound instanceof Howl) {
+          this.sound.unload();
+        }
+
+        this.currentSong = song;
+
+        this.sound = new Howl({
+          src: [song.url],
+          html5: true,
+        });
+
+        this.sound.play();
+
+        this.sound.on('play', () => {
+          requestAnimationFrame(this.progress);
+        });
       }
-
-      this.currentSong = song;
-
-      this.sound = new Howl({
-        src: [song.url],
-        html5: true,
-      });
-
-      this.sound.play();
-
-      this.sound.on('play', () => {
-        requestAnimationFrame(this.progress);
-      });
     },
     async toggleAudio() {
       if (!this.sound.playing) {
