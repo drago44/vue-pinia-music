@@ -24,6 +24,7 @@ export const usePlayerStore = defineStore('player', {
         this.sound = new Howl({
           src: [song.url],
           html5: true,
+          volume: 0.1,
         });
 
         this.sound.play();

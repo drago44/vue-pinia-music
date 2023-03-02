@@ -36,7 +36,7 @@ a:hover {
   border-style: solid;
 }
 
-input[type="file"] {
+input[type='file'] {
   margin-top: 20px;
 }
 
@@ -76,4 +76,13 @@ input[type="file"] {
   100% {
     background-position: -4000px 0;
   }
+}
+
+#nprogress .bar {
+  background: linear-gradient(45deg, #f59e0b, #9198e5) !important;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: #f59e0b !important;
+  border-left-color: #f59e0b !important;
 }

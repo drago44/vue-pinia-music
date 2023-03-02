@@ -8,7 +8,12 @@ import { useUserStore, usePlayerStore } from '@/stores';
 const userStore = useUserStore();
 const playerStore = usePlayerStore();
 
-// const toggleAudio = computed((song) => playerStore.toggleAudio(song));
+const { userLoggedIn } = storeToRefs(userStore);
+const { playing } = storeToRefs(playerStore);
+const { newSong } = playerStore;
+
+const router = useRouter();
+const route = useRoute();
 
 const song = ref({});
 const commentSchema = {
@@ -21,12 +26,15 @@ const commentAlertMessage = ref('Please wait! Your comment is being submitted');
 const comments = ref([]);
 const sort = ref('1');
 
-const { userLoggedIn } = storeToRefs(userStore);
-const { playing } = storeToRefs(playerStore);
-const { newSong } = playerStore;
+const sortedComments = computed(() => {
+  return comments.value.slice().sort((a, b) => {
+    if (sort.value === '1') {
+      return new Date(b.datePosted) - new Date(a.datePosted);
+    }
 
-const router = useRouter();
-const route = useRoute();
+    return new Date(a.datePosted) - new Date(b.datePosted);
+  });
+});
 
 const addComment = async (values, { resetForm }) => {
   commentInSubmission.value = true;
@@ -72,16 +80,6 @@ const getComments = async () => {
     });
   });
 };
-
-const sortedComments = computed(() => {
-  return comments.value.slice().sort((a, b) => {
-    if (sort.value === '1') {
-      return new Date(b.datePosted) - new Date(a.datePosted);
-    }
-
-    return new Date(a.datePosted) - new Date(b.datePosted);
-  });
-});
 
 const created = async () => {
   const docSnapshot = await songsCollection.doc(route.params.id).get();

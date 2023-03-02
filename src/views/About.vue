@@ -1,5 +1,11 @@
+
+import Button from '../components/base/Button.vue';
+
 <template>
   <main>
-    <div>About</div>
+    <div class="about">
+      <h1>This is about page</h1>
+      <BaseButton />
+    </div>
   </main>
 </template>
