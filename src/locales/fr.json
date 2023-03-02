@@ -1,0 +1,11 @@
+{
+  "home": {
+    "listen": "Écoutez de la bonne musique!"
+  },
+  "song": {
+    "commentCount": "No comments | 1 comment | {count} comments"
+  },
+  "manage": {
+    "mySongs": "Mes chansons"
+  }
+}

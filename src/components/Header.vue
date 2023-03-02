@@ -1,13 +1,26 @@
 <script setup>
+import { computed, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useModalStore, useUserStore } from '@/stores';
 import { RouterLink } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+
+const { locale } = useI18n();
+const i18nLocale = ref(locale);
 
 const modalStore = useModalStore();
 const userStore = useUserStore();
 const { toggleAuthModal } = modalStore;
 const { userLoggedIn } = storeToRefs(userStore);
 const { signOut } = userStore;
+
+const currentLocale = computed(() => {
+  return i18nLocale.value === 'fr' ? 'French' : 'English';
+});
+
+const changeLocale = () => {
+  i18nLocale.value = i18nLocale.value === 'fr' ? 'en' : 'fr';
+};
 </script>
 
 <template>
@@ -56,6 +69,13 @@ const { signOut } = userStore;
               >
             </li>
           </template>
+        </ul>
+        <ul class="ml-auto">
+          <li>
+            <a class="px-2 text-white" href="#" @click.prevent="changeLocale">
+              {{ currentLocale }}
+            </a>
+          </li>
         </ul>
       </div>
     </nav>
