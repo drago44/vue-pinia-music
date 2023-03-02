@@ -24,6 +24,18 @@ const upload = ($event) => {
       return;
     }
 
+    if (!navigator.onLine) {
+      uploads.value.push({
+        task: {},
+        currentProgress: 100,
+        name: file.name,
+        variant: 'bg-red-400',
+        icon: 'fas fa-times',
+        textClass: 'text-red-400',
+      });
+      return;
+    }
+
     const storageRef = storage.ref();
     const songsRef = storageRef.child(`songs/${file.name}`);
     const task = songsRef.put(file);
@@ -35,7 +47,7 @@ const upload = ($event) => {
         name: file.name,
         variant: 'bg-blue-400',
         icon: 'fas fa-spinner fa-spin',
-        testClass: '',
+        textClass: '',
       }) - 1;
 
     task.on(
@@ -48,7 +60,7 @@ const upload = ($event) => {
       (error) => {
         uploads.value[uploadIndex].variant = 'bg-red-400';
         uploads.value[uploadIndex].icon = 'fas fa-times';
-        uploads.value[uploadIndex].testClass = 'text-red-400';
+        uploads.value[uploadIndex].textClass = 'text-red-400';
         console.log(error);
       },
       async () => {
@@ -69,7 +81,7 @@ const upload = ($event) => {
 
         uploads.value[uploadIndex].variant = 'bg-green-400';
         uploads.value[uploadIndex].icon = 'fas fa-check';
-        uploads.value[uploadIndex].testClass = 'text-green-400';
+        uploads.value[uploadIndex].textClass = 'text-green-400';
       },
     );
   });
@@ -127,7 +139,7 @@ onBeforeUnmount(() => {
       <!-- Progess Bars -->
       <div v-for="upload in uploads" :key="upload.name" class="mb-4">
         <!-- File Name -->
-        <div :class="upload.testClass" class="font-bold text-sm">
+        <div :class="upload.textClass" class="font-bold text-sm">
           <i :class="upload.icon"></i> {{ upload.name }}
         </div>
         <div class="flex h-4 overflow-hidden bg-gray-200 rounded">
